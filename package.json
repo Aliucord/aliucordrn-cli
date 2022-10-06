@@ -1,7 +1,7 @@
 {
   "name": "@aliucord/cli",
   "version": "1.0.0",
-  "packageManager": "pnpm@7.12.2",
+  "packageManager": "pnpm@7.13.1",
   "type": "module",
   "dependencies": {
     "@devicefarmer/adbkit": "^3.2.3",
@@ -11,7 +11,6 @@
     "chalk-template": "^0.4.0",
     "commander": "^9.4.0",
     "common-tags": "^1.8.2",
-    "nodegit": "^0.27.0",
     "ora": "^6.1.2",
     "prompts": "^2.4.2",
     "tslib": "^2.4.0",

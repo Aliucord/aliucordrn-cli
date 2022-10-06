@@ -1,8 +1,11 @@
 import ora from "ora";
 import { Result } from "@sapphire/result";
 import chalk from "chalk-template";
-import Git from "nodegit";
-import { ReadStream } from "node:fs";
+import { promisify } from "node:util";
+import { exec as execCallback } from "child_process";
+
+const exec = promisify(execCallback);
+const remoteRegex = /^(?<name>.+)\t(?<url>.+) \((?<type>push|fetch)\)$/;
 
 /**
  * Runs some code, adding a visual spinner and automatically handling success/fail
@@ -22,32 +25,34 @@ export async function spinner<T, E>(text: string, func: () => T): Promise<Result
 }
 
 export async function getGitUrl(): Promise<string|null> {
-    const repo = await Git.Repository.open(
-        process.cwd()
+    const remotes = await exec("git remote -v").then(
+        output => 
+            output
+            .stdout
+            .trimEnd()
+            .split("\n") // Split into array
+            .map(e => e.match(remoteRegex)) // Parse all lines
+            .filter(e => e !== null) as RegExpMatchArray[] // Filter out all non-null elements
     )
-    const remotes = await repo.getRemotes();
-    const origin = remotes.find(r => r.name() === "origin");
-    let remote: Git.Remote;
+    let remote: RegExpMatchArray;
     if (remotes.length === 1) {
-        remote = remotes[0];
+        remote = remotes[0]; // Use only remote if exists
     } else if (remotes.length < 1) {
-        return null;
-    } else if (origin) {
-        remote = origin;
+        return null; // Return null if no remotes exist
+    } else if (remotes.find(r => r.groups!.name === "origin")) {
+        remote = remotes.find(r => r.groups!.name === "origin")!; // Prioritize remote named "origin"
     } else {
         // Otherwise, check the current upstream
-        const upstreamRef = await Git.Branch.remoteName(
-            repo,
-            await Git.Branch.upstream(
-                await repo.getCurrentBranch()
-            ).then(ref => ref.name())
-        )
-        const branchRemote = remotes.find(r => r.name() === upstreamRef)
-        if (!branchRemote) return null;
-        remote = branchRemote;
+        const branch = await exec("git branch --show-current")
+            .then(output => output.stdout.trimEnd())
+        const upstreamRemote = await exec(`git config --get branch.${branch}.remote`)
+            .then(output => output.stdout.trimEnd())
+            .catch(() => null) // If comman fails, replace with null
+        if (upstreamRemote === null) return null;
+        else remote = remotes.find(r => r.groups!.name === upstreamRemote)!;
     }
     // Check if remote is an ssh remote
-    const url = remote.url();
+    const url = remote.groups!.url;
     if (url.startsWith("git@")) {
         const parsed = /^git@(?<domain>[\w.]+):(?<repo>.+)/.exec(url)
         if (!parsed) return null;
@@ -58,9 +63,5 @@ export async function getGitUrl(): Promise<string|null> {
 }
 
 export async function getLatestCommit(): Promise<string|null> {
-    const repo = await Git.Repository.open(
-        process.cwd()
-    );
-    const head = await repo.getHeadCommit();
-    return head.sha();
+    return await exec("git rev-parse HEAD").then(o => o.stdout.trimEnd())
 }
