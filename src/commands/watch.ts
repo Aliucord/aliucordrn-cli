@@ -3,8 +3,8 @@ import { Command } from "commander";
 import { stripIndent } from "common-tags";
 import path from "node:path";
 import { OutputAsset } from "rollup";
-import * as rollupUtils from "../rollup.js"
-import { spinner } from "../util.js";
+import * as rollupUtils from "../utils/rollup.js"
+import { spinner } from "../utils/cli.js";
 
 export function register(program: Command) {
     const cwd = process.cwd();

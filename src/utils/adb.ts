@@ -1,6 +1,8 @@
 import AdbKit from "@devicefarmer/adbkit"
 import { ReadStream } from "node:fs";
 
+const DISCORD_RN_INTENT_REGEX = /\s+[\w\d]{6,7} (?<package>[a-z][a-z0-9_]*(?:\.[a-z0-9_]+)*[a-z0-9_]*)\/com\.discord\.main\.MainActivity/g
+
 export async function pushFile(contents: string|ReadStream, devicePath: string): Promise<void> {
     // This sucks but node won't import it without doing it like this
     const adb = AdbKit.Adb.createClient();
@@ -42,22 +44,25 @@ export async function restartPackage(intent: string): Promise<void> {
     await device.startActivity({})
 }
 
-// export async function findDiscordPackage(): Promise<string> {
-//     const adb = AdbKit.Adb.createClient();
-//     const devices = await adb.listDevices().then(
-//         devices =>
-//             devices
-//                 .filter(d => d.type !== "offline")
-//                 .map(d => adb.getDevice(d.id))
-//     );
-//     if (devices.length < 1) throw new AdbError(AdbErrorReason.NO_DEVICES);
-//     if (devices.length > 1) throw new AdbError(AdbErrorReason.TOO_MANY_DEVICES);
-//     const device = devices[0];
-//     const packages = await device.getPackages();
-//     for (const appPackage of packages) {
-//         await device.
-//     }
-// }
+export async function findDiscordPackage(): Promise<string|null> {
+    const adb = AdbKit.Adb.createClient();
+    const devices = await adb.listDevices().then(
+        devices =>
+            devices
+                .filter(d => d.type !== "offline")
+                .map(d => adb.getDevice(d.id))
+    );
+    if (devices.length < 1) throw new AdbError(AdbErrorReason.NO_DEVICES);
+    if (devices.length > 1) throw new AdbError(AdbErrorReason.TOO_MANY_DEVICES);
+    const device = devices[0];
+    const outputStream = await device.shell("dumpsys package | grep \"com.discord.main.MainActivity\"");
+    const chunks: Buffer[] = [];
+    for await (const chunk of outputStream) chunks.push(chunk);
+    const output = Buffer.concat(chunks).toString("utf8");
+    const parsed = DISCORD_RN_INTENT_REGEX.exec(output);
+    if (parsed === null) return null;
+    else return parsed.groups!.package;
+}
 
 export class AdbError extends Error {
     constructor(public reason: AdbErrorReason) {

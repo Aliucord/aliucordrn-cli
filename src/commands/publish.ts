@@ -1,8 +1,9 @@
 import { Command } from "commander";
 import { PluginManifest, PublishData } from "../types/aliucord.js";
 import prompts from "prompts";
-import { getGitUrl, getLatestCommit, spinner } from "../util.js";
-import * as rollupUtils from "../rollup.js";
+import { getGitUrl, getLatestCommit } from "../utils/git.js";
+import { spinner } from "../utils/cli.js";
+import * as rollupUtils from "../utils/rollup.js";
 import { OutputAsset } from "rollup";
 import { fetch } from "undici";
 import { SPDXLicensesInfo } from "../types/spdx.js";

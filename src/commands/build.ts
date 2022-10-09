@@ -1,12 +1,11 @@
 import { Command } from "commander";
-import { spinner } from "../util.js";
-import * as rollupUtils from "../rollup.js";
+import { spinner } from "../utils/cli.js";
+import * as rollupUtils from "../utils/rollup.js";
 import chalk from "chalk-template";
 import { OutputAsset } from "rollup";
 import fs from "node:fs";
 import path from "node:path";
-import * as adbUtils from "../adb.js";
-import { AdbError, AdbErrorReason } from "../adb.js";
+import * as adbUtils from "../utils/adb.js";
 import { stripIndent } from "common-tags";
 
 export function register(program: Command) {
