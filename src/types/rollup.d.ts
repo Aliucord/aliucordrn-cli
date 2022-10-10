@@ -13,6 +13,6 @@ declare module "rollup/loadConfigFile" {
 
 	export default function loadAndParseConfigFile(
 		fileName: string,
-		commandOptions: any
+		commandOptions: unknown
 	): Promise<{ options: MergedRollupOptions[]; warnings: BatchWarnings }>;
 }

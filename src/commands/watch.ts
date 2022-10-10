@@ -7,14 +7,12 @@ import * as rollupUtils from "../utils/rollup.js";
 import { spinner } from "../utils/cli.js";
 
 export function register(program: Command) {
-	const cwd = process.cwd();
-
 	program
 		.command("watch <plugin>")
 		.description(
 			"Watches a plugin using the rollup config in the current directory"
 		)
-		.action(async (plugin: string, opts) => {
+		.action(async (plugin: string) => {
 			const rollupConfig = await spinner(
 				"Loading rollup configuration...",
 				() => rollupUtils.loadConfig(plugin)

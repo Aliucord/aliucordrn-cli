@@ -9,8 +9,6 @@ import * as adbUtils from "../utils/adb.js";
 import { stripIndent } from "common-tags";
 
 export function register(program: Command) {
-	const cwd = process.cwd();
-
 	program
 		.command("build <plugin>")
 		.description(
@@ -58,7 +56,6 @@ export function register(program: Command) {
 				);
 
 				if (!opts.output) {
-					const parsed = path.parse(rollupConfig.output[0].file!);
 					console.log(
 						chalk`{greenBright.bold Successfully built ${plugin} to ${rollupOutputPath}}`
 					);

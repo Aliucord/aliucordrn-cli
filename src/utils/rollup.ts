@@ -1,7 +1,7 @@
 import * as rollup from "rollup";
 import type { MergedRollupOptions, RollupWarning } from "rollup";
 import loadAndParseConfigFile from "rollup/loadConfigFile";
-import path, { resolve } from "node:path";
+import path from "node:path";
 
 export type RollupGenerated = [
 	rollup.OutputChunk,
@@ -27,7 +27,7 @@ export async function runRollup(plugin: string, options: MergedRollupOptions) {
 	process.stdout;
 	const bundle = await rollup.rollup({
 		...options,
-		onwarn: (warning, original) => {
+		onwarn: warning => {
 			warnings.push(warning);
 		}
 	});
@@ -57,7 +57,7 @@ export async function* watchRollup(
 			clearScreen: false,
 			skipWrite: true
 		},
-		onwarn: (warning, original) => {
+		onwarn: warning => {
 			warnings.push(warning);
 		}
 	});

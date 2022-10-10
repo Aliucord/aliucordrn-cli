@@ -11,8 +11,6 @@ import chalk from "chalk-template";
 import { oneLineCommaListsAnd, stripIndent } from "common-tags";
 
 export function register(program: Command) {
-	const cwd = process.cwd();
-
 	program
 		.command("publish [plugin]")
 		.description("Publishes your plugin to the aliucord plugin repo")
@@ -149,6 +147,7 @@ export function register(program: Command) {
 				console.log();
 			}
 
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Temporary to shut eslint up, this will be used in the future
 			const { confirm: confirmData } = await prompts({
 				type: "confirm",
 				name: "confirm",
