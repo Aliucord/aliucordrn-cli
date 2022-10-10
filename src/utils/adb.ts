@@ -13,7 +13,9 @@ export async function pushFile(
 	const devices = await adb
 		.listDevices()
 		.then(devices =>
-			devices.filter(d => d.type !== "offline").map(d => adb.getDevice(d.id))
+			devices
+				.filter(d => d.type !== "offline")
+				.map(d => adb.getDevice(d.id))
 		);
 	if (devices.length < 1) throw new AdbError(AdbErrorReason.NO_DEVICES);
 	if (devices.length > 1) throw new AdbError(AdbErrorReason.TOO_MANY_DEVICES);
@@ -27,12 +29,20 @@ export async function restartPackage(intent: string): Promise<void> {
 	const devices = await adb
 		.listDevices()
 		.then(devices =>
-			devices.filter(d => d.type !== "offline").map(d => adb.getDevice(d.id))
+			devices
+				.filter(d => d.type !== "offline")
+				.map(d => adb.getDevice(d.id))
 		);
 	if (devices.length < 1) throw new AdbError(AdbErrorReason.NO_DEVICES);
 	if (devices.length > 1) throw new AdbError(AdbErrorReason.TOO_MANY_DEVICES);
 	const device = devices[0];
-	const outputStream = await device.shell(["am", "start", "-S", "-n", intent]);
+	const outputStream = await device.shell([
+		"am",
+		"start",
+		"-S",
+		"-n",
+		intent
+	]);
 	const chunks: Buffer[] = [];
 	for await (const chunk of outputStream) chunks.push(chunk);
 	const output = Buffer.concat(chunks).toString("utf8");
@@ -49,7 +59,9 @@ export async function findDiscordPackage(): Promise<string | null> {
 	const devices = await adb
 		.listDevices()
 		.then(devices =>
-			devices.filter(d => d.type !== "offline").map(d => adb.getDevice(d.id))
+			devices
+				.filter(d => d.type !== "offline")
+				.map(d => adb.getDevice(d.id))
 		);
 	if (devices.length < 1) throw new AdbError(AdbErrorReason.NO_DEVICES);
 	if (devices.length > 1) throw new AdbError(AdbErrorReason.TOO_MANY_DEVICES);

@@ -1,5 +1,6 @@
 arrowParens: avoid
 useTabs: true
+tabWidth: 4
 quoteProps: as-needed
 singleQuote: false
 endOfLine: lf

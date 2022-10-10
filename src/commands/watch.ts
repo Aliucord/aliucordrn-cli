@@ -23,9 +23,14 @@ export function register(program: Command) {
 				})
 			);
 
-			console.log(chalk`{greenBright.bold Started watching plugin ${plugin}}`);
+			console.log(
+				chalk`{greenBright.bold Started watching plugin ${plugin}}`
+			);
 
-			for await (const data of rollupUtils.watchRollup(plugin, rollupConfig)) {
+			for await (const data of rollupUtils.watchRollup(
+				plugin,
+				rollupConfig
+			)) {
 				const zip = data.outputs.find(asset =>
 					asset.fileName.endsWith(".zip")
 				) as OutputAsset;

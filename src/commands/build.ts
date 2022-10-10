@@ -74,7 +74,9 @@ export function register(program: Command) {
 					// Push the file via adb
 					await spinner("Deploying via adb...", () =>
 						adbUtils.pushFile(
-							fs.createReadStream(path.join(process.cwd(), rollupOutputPath)),
+							fs.createReadStream(
+								path.join(process.cwd(), rollupOutputPath)
+							),
 							`/sdcard/AliucordRN/plugins/${zip.fileName}`
 						)
 					).then(result =>
@@ -84,8 +86,8 @@ export function register(program: Command) {
 									chalk`
                                             {redBright.bold Failed to push plugin to device:}
                                             {redBright ${
-																							e?.reason ?? e?.message ?? e
-																						}}
+												e?.reason ?? e?.message ?? e
+											}}
                                         `
 								)
 							);
@@ -94,7 +96,9 @@ export function register(program: Command) {
 					);
 					// Restart aliucordrn app
 					await spinner("Restarting the aliucord app...", () =>
-						adbUtils.restartPackage(opts.package ?? "com.aliucord.rn")
+						adbUtils.restartPackage(
+							opts.package ?? "com.aliucord.rn"
+						)
 					).then(result =>
 						result.unwrapOrElse(e => {
 							console.error(
@@ -102,8 +106,8 @@ export function register(program: Command) {
 									chalk`
                                             {redBright.bold Failed to restart app:}
                                             {redBright ${
-																							e?.reason ?? e?.message ?? e
-																						}}
+												e?.reason ?? e?.message ?? e
+											}}
                                         `
 								)
 							);

@@ -29,7 +29,8 @@ export function register(program: Command) {
 					{
 						type: "text",
 						name: "pluginName",
-						message: "What is the name of the plugin you want to publish?"
+						message:
+							"What is the name of the plugin you want to publish?"
 					},
 					{
 						type: "text",
@@ -68,10 +69,12 @@ export function register(program: Command) {
 				"Loading rollup configuration...",
 				() => rollupUtils.loadConfig(pluginName)
 			);
-			const rollupConfig = rollupConfigResult.unwrapOrElse((e: unknown) => {
-				console.error(e);
-				process.exit(1);
-			});
+			const rollupConfig = rollupConfigResult.unwrapOrElse(
+				(e: unknown) => {
+					console.error(e);
+					process.exit(1);
+				}
+			);
 
 			const pluginBuildResult = await spinner("Building plugin...", () =>
 				rollupUtils.runRollup(pluginName, rollupConfig)
@@ -88,7 +91,9 @@ export function register(program: Command) {
 					output => output.fileName === `${pluginName}-manifest.json`
 				) as OutputAsset
 			).source as string;
-			const parsedManifest = JSON.parse(extractedManifest) as PluginManifest;
+			const parsedManifest = JSON.parse(
+				extractedManifest
+			) as PluginManifest;
 
 			const pluginLicenseInfo = await spinner(
 				"Fetching plugin license data from spdx...",
@@ -99,12 +104,16 @@ export function register(program: Command) {
 					const pluginLicenseInfo = spdxLicenses.licenses.find(
 						l => l.licenseId === parsedManifest.license
 					);
-					if (!pluginLicenseInfo) throw new Error("Unable to find license");
+					if (!pluginLicenseInfo)
+						throw new Error("Unable to find license");
 					return pluginLicenseInfo;
 				}
 			).then(result =>
 				result.unwrapOrElse((e: unknown) => {
-					if (e instanceof Error && e.message === "Unable to find license") {
+					if (
+						e instanceof Error &&
+						e.message === "Unable to find license"
+					) {
 						console.error(
 							chalk`{redBright Unable to find the spdx license entry from your plugin's license. Make sure the license specified is a valid (case-sensitive) spdx license identifier.}`
 						);
@@ -134,9 +143,9 @@ export function register(program: Command) {
                             Version: {yellow ${publishData.version}}
                             Authors: ${oneLineCommaListsAnd`
                                     ${publishData.authors.map(
-																			a =>
-																				chalk`{yellow ${a.name}} ({yellow ${a.id}})`
-																		)}
+										a =>
+											chalk`{yellow ${a.name}} ({yellow ${a.id}})`
+									)}
                                 `}
                             Git repo url: {yellow ${publishData.gitRepoUrl}}
                             Commit ID: {yellow ${publishData.commitId}}

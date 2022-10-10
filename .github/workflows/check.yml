@@ -1,0 +1,52 @@
+name: Node.js CI
+
+on:
+    - push
+    - pull_request
+    - workflow_dispatch
+
+jobs:
+    Test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v2
+
+            - name: Use Node.js 18
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+
+            - name: Get pnpm store directory
+              id: pnpm-cache
+              run: |
+                echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+
+            - name: Setup pnpm cache
+              uses: actions/cache@v3
+              with:
+                path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+                key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+                restore-keys: |
+                    ${{ runner.os }}-pnpm-store-
+
+            - name: Setup corepack cache
+              uses: actions/cache@v3
+              with:
+                  path: ~/.node/corepack
+                  key: ${{ runner.os }}-corepack-${{ hashFiles('package.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-corepack-
+
+            - name: Install dependencies
+              run: pnpm i
+
+            - name: Lint with eslint
+              run: pnpm lint
+
+            - name: Check formatting with prettier
+              run: pnpm format:check
+
+            - name: Check build with tsc
+              run: pnpm build:check
