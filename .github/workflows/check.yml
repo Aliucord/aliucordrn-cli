@@ -18,6 +18,17 @@ jobs:
               with:
                   node-version: 18
 
+            - name: Enable corepack
+              run: corepack enable
+
+            - name: Setup corepack cache
+              uses: actions/cache@v3
+              with:
+                  path: ~/.node/corepack
+                  key: ${{ runner.os }}-corepack-${{ hashFiles('package.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-corepack-
+
             - name: Get pnpm store directory
               id: pnpm-cache
               run: |
@@ -30,14 +41,6 @@ jobs:
                 key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
                 restore-keys: |
                     ${{ runner.os }}-pnpm-store-
-
-            - name: Setup corepack cache
-              uses: actions/cache@v3
-              with:
-                  path: ~/.node/corepack
-                  key: ${{ runner.os }}-corepack-${{ hashFiles('package.json') }}
-                  restore-keys: |
-                      ${{ runner.os }}-corepack-
 
             - name: Install dependencies
               run: pnpm i
