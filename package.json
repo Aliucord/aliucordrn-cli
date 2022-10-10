@@ -1,39 +1,40 @@
 {
-  "name": "@aliucord/cli",
-  "version": "1.0.0",
-  "packageManager": "pnpm@7.13.1",
-  "type": "module",
-  "dependencies": {
-    "@devicefarmer/adbkit": "^3.2.3",
-    "@rollup/plugin-typescript": "^8.5.0",
-    "@sapphire/result": "^2.4.1",
-    "chalk": "^5.0.1",
-    "chalk-template": "^0.4.0",
-    "commander": "^9.4.0",
-    "common-tags": "^1.8.2",
-    "ora": "^6.1.2",
-    "prompts": "^2.4.2",
-    "tslib": "^2.4.0",
-    "undici": "^5.10.0"
-  },
-  "devDependencies": {
-    "@types/bluebird": "^3.5.37",
-    "@types/common-tags": "^1.8.1",
-    "@types/node": "^18.7.23",
-    "@types/nodegit": "^0.27.10",
-    "@types/prompts": "^2.0.14",
-    "rollup": "^2.79.1",
-    "typescript": "^4.8.4"
-  },
-  "main": "dist/cli.js",
-  "bin": {
-    "aliu": "dist/cli.js"
-  },
-  "peerDependencies": {
-    "rollup": "^2.79.1"
-  },
-  "scripts": {
-    "build": "tsc",
-    "prepare": "pnpm build"
-  }
+	"name": "@aliucord/cli",
+	"version": "1.0.0",
+	"packageManager": "pnpm@7.13.1",
+	"type": "module",
+	"dependencies": {
+		"@devicefarmer/adbkit": "^3.2.3",
+		"@rollup/plugin-typescript": "^8.5.0",
+		"@sapphire/result": "^2.4.1",
+		"chalk": "^5.0.1",
+		"chalk-template": "^0.4.0",
+		"commander": "^9.4.0",
+		"common-tags": "^1.8.2",
+		"ora": "^6.1.2",
+		"prompts": "^2.4.2",
+		"tslib": "^2.4.0",
+		"undici": "^5.10.0"
+	},
+	"devDependencies": {
+		"@types/bluebird": "^3.5.37",
+		"@types/common-tags": "^1.8.1",
+		"@types/node": "^18.7.23",
+		"@types/nodegit": "^0.27.10",
+		"@types/prompts": "^2.0.14",
+		"prettier": "^2.7.1",
+		"rollup": "^2.79.1",
+		"typescript": "^4.8.4"
+	},
+	"main": "dist/cli.js",
+	"bin": {
+		"aliu": "dist/cli.js"
+	},
+	"peerDependencies": {
+		"rollup": "^2.79.1"
+	},
+	"scripts": {
+		"build": "tsc",
+		"prepare": "pnpm build"
+	}
 }

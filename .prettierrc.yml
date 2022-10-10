@@ -1,0 +1,7 @@
+arrowParens: avoid
+useTabs: true
+quoteProps: as-needed
+singleQuote: false
+endOfLine: lf
+semi: true
+trailingComma: none
