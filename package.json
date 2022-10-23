@@ -11,6 +11,8 @@
 		"chalk-template": "^0.4.0",
 		"commander": "^9.4.0",
 		"common-tags": "^1.8.2",
+		"fflate": "^0.7.4",
+		"openpgp": "^5.5.0",
 		"ora": "^6.1.2",
 		"prompts": "^2.4.2",
 		"tslib": "^2.4.0",
@@ -44,6 +46,7 @@
 		"format": "prettier --write .",
 		"format:check": "prettier --check .",
 		"lint": "eslint src",
-		"test": "pnpm format:check && pnpm lint && pnpm build:check"
+		"test": "pnpm format:check && pnpm lint && pnpm build:check",
+		"dev": "tsc && node --enable-source-maps dist/cli.js"
 	}
 }
